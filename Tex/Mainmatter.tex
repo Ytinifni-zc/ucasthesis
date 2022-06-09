@@ -48,6 +48,105 @@
 虽然图的平均度数是恒定的，但总有几个节点拥有非常大的度数。
 这种现象通常被称为幂律（power-law）分布\citep{barabasi1999emergence}，这对三角形计数算法的性能有很大影响。
 
+\section{基本定义、常用指标与基础采样方法}
+
+给定输入图$G(V,E)$，其中$V$表示图的节点集合，$E$表示边集合，$n,m$分别表示节点数量$|V|$和边数量$|E|$。
+为了方便本文调研三角形计数的研究工作，我们假定本文中的图$G$均为简单无向图，即任意两个节点$u$和$v$间如果存在邻边，则至多存在一条，记为$e=(u,v)$，其中$u < v$。
+我们使用$d(u)$表示节点$u$的度数，$adj(u)$表示节点$u$的邻居节点集合，$inc(u)$表示节点$u$的邻边集合，$inc(e)$表示边$e$的邻接节点集合。
+最大的节点度数记为$d_{max}$。
+
+\subsection{三角形和三链}
+
+连通三元组$(u,v,w)$对于节点$v$而言是一个以节点$v$为中心的长度为2的路径。
+如果另外两个节点$u,w$也是有边相连的，那么称此三元组为三角形（闭三元组），否则称之为三链（开三元组）。
+一个三角形包含三个闭三元组，因为三个节点都可以视作三元组的中心。
+
+我们使用符号$\Pi_v$表示以节点$v$为中心的三元组的集合。
+图$G=(V,E)$中的所有三元组集合记为$\Pi$，是所有节点的三元组集合的并集，$\Pi=\bigcup_{u\in V}\Pi_v$。
+若每个节点的度数均已知，则所有三元组的数量可依下式计算，
+\begin{equation}
+    |\Pi|=\sum_{v\in V}|\Pi_v|=\sum_{v\in V}\binom{d(v)}{2} 
+    \label{eq:triple_num}
+\end{equation}
+我们分别记开三元组与闭三元组的集合为$\Pi^\angle $和$\Pi^\vartriangle $，以节点$v$为中心的开闭三元组集合分别为$\Pi^\angle_v$和$\Pi^\vartriangle_v$。
+注意，在集合中$\Pi^\vartriangle $，三角形中的任一节点都贡献一个不同的三元组。
+我们使用$\Lambda$表示图$G$中不同三角形的集合。
+显然，$|\Pi^\vartriangle|=3|\Lambda|$。
+记图$G$中的三角形个数为$t(G)$，则
+\begin{equation}
+    t(G)=|\Lambda|=\frac{1}{3}|\Pi^\vartriangle|=\frac{1}{3}\sum_{v\in V}|\Pi^\vartriangle_v|
+    \label{eq:triangle_num}
+\end{equation}
+
+\subsection{计数、枚举与采样三角形}
+
+对于一个给定的图$G$，三角形计数（counting）的任务是获得公式\ref{eq:triangle_num}中定义的数字$t(G)$。
+另一方面，三角形枚举（enumerating）任务是枚举$\Lambda$中的所有元素，即列出给定图中所有不同的三角形。
+枚举是一个比计数成本更高的任务，因为前者能立即解决后者，但后者不一定能解决前者。
+尽管如此，对于许多现实生活中的应用，人们可能需要枚举三角形，而不是简单地找出它的总数量，所以计数和枚举任务都有其自身的优点。
+三角形的抽样是为了获得$\Lambda$的一个子集，通常子集的大小是一个用户定义的参数。
+根据抽样算法，样本集中的三角形可以是统一选择的（每个三角形都是以统一的概率抽样），也可以是以有偏见的概率抽样。
+有时，我们只对找到与给定节点相邻的三角形的数量感兴趣。
+这项任务被称为局部三角形计数。
+局部三角形计数对于确定一个给定节点的集聚系数非常重要。
+
+\subsection{指标}
+
+\textbf{集聚系数}。
+集聚系数是一个表示图中节点的集聚倾向的度量。
+当这个度量定义在图的节点上时，它被称为局部集聚系数。
+对于一个给定的节点$u$，其局部集聚系数$C(u)$是$u$的邻居中自己是邻居的部分。
+\begin{equation}
+    C(u)=\frac{|(v,w):(v,w)\in E\land v,w\in adj(u)|}{adj(u)(adj(u)-1)/2}
+    \label{eq:clustering_coef}
+\end{equation}
+节点的局部集聚系数的平均值被称为图的集聚系数。
+
+\textbf{传递性}。
+图$G$的传递性为闭三元组的数量与三元组的总数的比值，记为$\gamma(G)$，
+\begin{equation}
+    \gamma(G)=\frac{|\Pi^\vartriangle|}{|\Pi|}=\frac{\Pi^\vartriangle}{\Pi^\vartriangle+\Pi^\angle}
+    \label{eq:transitivity}
+\end{equation}
+根据公式\ref{eq:triangle_num}和\ref{eq:transitivity}可得图$G$的三角形数量$t(G)$可以从其传递性计算，
+\begin{equation}
+    t(G)=\frac{1}{3}\cdot \gamma(G) \cdot |\Pi| 
+    \label{eq:tc_trans}
+\end{equation}
+
+\subsection{采样}
+
+\textbf{Metropolis–Hastings（MH）算法}。
+一些近似的三角形计数方法使用基于随机游走（random walk）的间接抽样策略对三角形或三角形进行抽样，也被称为马尔科夫链-蒙特卡洛（Markov Chain Monte Carlo, MCMC）抽样。
+Metropolis-Hastings（MH）算法是MCMC算法的一个变种；
+它的目标是从某个分布$\pi(x)$中抽取样本，称为目标分布，其中$\pi(x)=f(x)/K$，$f(x)$是任何为群体对象$x$分配非负实值的函数，表示其在抽样方面的可取性；
+$K$是一个归一化常数，使对象上的$\pi(x)$之和等于1。
+通常情况下，$K$是未知的或难以计算的。
+MH算法与随机游走一起用于执行MCMC采样，为此，MH算法从目标分布中抽取一连串的样本，如下所示：
+\begin{enumerate}
+    \item 选择初始化状态（$x$）满足$f(x)>0$。
+    \item 从当前状态$x$开始，它使用分布$q(x, y)$对一个状态$y$进行采样，称为提议分布（proposal distribution）。
+    \item 然后，它计算接受概率$\alpha (x,y)$（公式\ref{eq:mh-sample}），并以概率$\alpha (x,y)$接受移动到$y$的提议。这个过程一直持续到马尔科夫链达到一个静止分布。
+    \begin{equation}
+        \alpha (x,y)=\min\Bigg(\frac{\pi(y)q(y,x)}{\pi(x)q(x,y)},1 \Bigg)=\min\Bigg(\frac{f(y)q(y,x)}{f(x)q(x,y)},1 \Bigg)
+        \label{eq:mh-sample}
+    \end{equation}
+\end{enumerate}
+
+\textbf{重要性采样}。
+重要性抽样（Importance Sampling, IS）是一种抽样策略，用于估计函数$f(x)$相对于某个分布$p(x)=\tilde{p}(x)/K$（称为目标分布）的期望值，而样本实际上是从一个不同的分布$q(x)$获得的，称为提议分布。
+当从分布$q$中取样比较容易，但我们需要获得相对于不同分布$p$的期望值时，IS就很有用。
+例如，对于三角形计数，我们想从一个均匀分布中获得三元组样本，即目标分布$p$是均匀的，但从一个有偏差的分布中取样可能更容易，如$q$。
+利用IS的思想，$f(x)$相对于目标分布的期望值等于
+\begin{equation}
+    \mathbb{E}_{p}[f(x)]=\sum_{i=1}^{S} f\left(x_{i}\right) \cdot w\left(x_{i}\right)
+    \label{eq:IS}
+\end{equation}
+其中
+\begin{equation}
+    w\left(x_{i}\right)=\frac{\widetilde{p}\left(x_{i}\right) / q\left(x_{i}\right)}{\sum_{j=1}^{S} \tilde{p}\left(x_{j}\right) / q\left(x_{j}\right)}
+\end{equation}
+
 \section{组织}
 
 \section{精确三角形计数}
