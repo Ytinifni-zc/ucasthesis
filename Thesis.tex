@@ -11,7 +11,7 @@
 %---------------------------------------------------------------------------%
 %->> Document class declaration
 %---------------------------------------------------------------------------%
-\documentclass[twoside]{Style/ucasthesis}%
+\documentclass[oneside]{Style/ucasthesis}%
 %- Multiple optional arguments:
 %- [<oneside|twoside|print>]% oneside eprint, twoside eprint, or paper print
 %- [fontset=<adobe|none|...>]% specify font set instead of automatic detection
@@ -67,12 +67,7 @@
 三角形计数是一个典型的任务，它常被用来计算图中的节点传递性（vertex-transitivity），以了解图的演变。
 在现实生活中，三角形计数常用于社区发现、链接预测、垃圾邮件过滤等等，近年来得到了数据挖掘界的广泛关注。
 虽然三角形计数任务简单，但是大多数现有的算法不能很好地扩展到具有数百万甚至数十亿级别节点的大规模图数据上。
-为了规避这一限制，近年来的研究工作提出了近似的三角形计数以及在分布式集群上运行的三角形计数方法。
-
-% TODO：待修改
-在本文中，我们讨论了现有的三角形计数方法，从顺序到并行，从单机到分布式，从精确到近似，从离线到流式。
-我们还介绍了在一个统一的实现框架下建立的一组近似三角形计数方法的性能比较实验结果。
-最后，我们对这一方向的未来工作进行了讨论。
+为了规避这一限制，近年来的研究工作提出了近似的三角形计数方法。在本文中，我们讨论了现有的三角形计数方法，从精确到近似。
 
 \keywords{三角形计数、近似算法}% 中文关键词
 % \input{Tex/Frontmatter}% title page, abstract
