@@ -29,7 +29,7 @@
 \cite{becchetti2008efficient}利用本地三角形的分布来检测网络垃圾邮件。
 垃圾邮件主机的局部三角形频率分布与非垃圾邮件主机的三角形频率分布有明显的不同。
 \cite{eckmann2002curvature}的工作使用三角形的分布来揭示万维网中隐藏的主题结构。
-万维网图中三角形密集的连接区域代表了一个共同的主题
+万维网图中三角形密集的连接区域代表了一个共同的主题。
 \cite{bar2002reductions}将三角形计数用于数据库的查询计划优化。
 社区发现中也常使用重叠三角形（$k$-cliques）\citep{palla2005uncovering}。
 
@@ -37,8 +37,8 @@
 早期的研究主要关注渐进时间复杂度（asymptotic computational complexity）\citep{itai1978finding, alon1997finding}。
 但在大规模图数据中做计算时，其高计算复杂度对计算效率提出了很大挑战。
 为了提升计算效率，在最近的许多工作中，通过采样进行近似三角形计数是一个非常热门的方向\citep{tsourakakis2008fast,rahman2014sampling,rahman2013approximate,tsourakakis2009doulion,jha2015space,seshadhri2013triadic}。
-研究人员试图通过在多核并行计算或分布式环境中运行的算法来提高效率\citep{rahman2013approximate,tsourakakis2009doulion,suri2011counting}。
-例如，三角计算算法已经被提出用于各种数据访问场景，这些场景与传统的内存访问不同，包括限制性访问\citep{rahman2014sampling}和流式数据访问\citep{seshadhri2013triadic,buriol2006counting}。
+% 研究人员试图通过在多核并行计算或分布式环境中运行的算法来提高效率\citep{rahman2013approximate,tsourakakis2009doulion,suri2011counting}。
+% 例如，三角计算算法已经被提出用于各种数据访问场景，这些场景与传统的内存访问不同，包括限制性访问\citep{rahman2014sampling}和流式数据访问\citep{seshadhri2013triadic,buriol2006counting}。
 
 三角形计数算法的计算复杂度是衡量其效率的一个很好的指标。
 但在现实生活中，即使两种算法的计算复杂度相同，其执行时间也会有很大差异。
@@ -58,7 +58,7 @@
 
 \section{三角形和三链}
 
-连通三元组$(u,v,w)$对于节点$v$而言是一个以节点$v$为中心的长度为2的路径。
+连通三元组$<u,v,w>$对于节点$v$而言是一个以节点$v$为中心的长度为2的路径。
 如果另外两个节点$u,w$也是有边相连的，那么称此三元组为三角形（闭三元组），否则称之为三链（开三元组）。
 一个三角形包含三个闭三元组，因为三个节点都可以视作三元组的中心。
 
@@ -70,7 +70,7 @@
     \label{eq:triple_num}
 \end{equation}
 我们分别记开三元组与闭三元组的集合为$\Pi^\angle $和$\Pi^\vartriangle $，以节点$v$为中心的开闭三元组集合分别为$\Pi^\angle_v$和$\Pi^\vartriangle_v$。
-注意，在集合中$\Pi^\vartriangle $，三角形中的任一节点都贡献一个不同的三元组。
+注意，在集合$\Pi^\vartriangle $中，三角形中的任一节点都贡献一个不同的三元组。
 我们使用$\Lambda$表示图$G$中不同三角形的集合。
 显然，$|\Pi^\vartriangle|=3|\Lambda|$。
 记图$G$中的三角形个数为$t(G)$，则
@@ -300,7 +300,7 @@ $\hat{t}(G)=\frac{1}{p^2}\cdot t(G_s) $。
 $\Pi=\sum_{i=1}^{n} \Pi_{i}$，和$\left|\Pi_{v}\right|=\left(\begin{array}{c}d(v) \\2\end{array}\right)$。
 该算法采样节点$v$的概率为$|\Pi_{v}|/|\Pi|$，采样三元组$<u,v,w>$的概率为
 \begin{equation}
-    P(\text { triple }\langle u, v, w\rangle \text { is sampled })=\frac{\left|\Pi_{v}\right|}{|\Pi|} \cdot \frac{1}{|\Pi_{v}|}=\frac{1}{|\Pi|} \text {, }
+    P(\text { triple }\langle u, v, w\rangle \text { is sampled })=\frac{\left|\Pi_{v}\right|}{|\Pi|} \cdot \frac{1}{|\Pi_{v}|}=\frac{1}{|\Pi|} 
 \end{equation}
 利用公式\ref{eq:app_trans}可以从采样得到的三元组中估算传递率。然后依据如下公式估计图中三角形数。
 \begin{equation}
